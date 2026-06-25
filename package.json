@@ -1,6 +1,7 @@
 {
-  "name": "announcement-bot",
+  "name": "discord-thongbao-bot",
   "version": "1.0.0",
+  "description": "Discord Announcement Bot",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
