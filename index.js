@@ -11,6 +11,8 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds]
 });
 
+const OWNER_ID = "1273975199385129064";
+
 client.once("ready", async () => {
 
     console.log(`✅ ${client.user.tag} đã online`);
@@ -47,8 +49,14 @@ client.once("ready", async () => {
 
 client.on("interactionCreate", async interaction => {
 
-    if (!interaction.isChatInputCommand()) return;
+if (!interaction.isChatInputCommand()) return;
 
+if (interaction.user.id !== OWNER_ID) {
+    return interaction.reply({
+        content: " Chỉ Admin mới được sử dụng lệnh này.",
+        ephemeral: true
+    });
+}
     if (interaction.commandName === "thongbao") {
 
         const noidung =
