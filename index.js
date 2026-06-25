@@ -56,7 +56,7 @@ client.on("interactionCreate", async interaction => {
 
         const embed = new EmbedBuilder()
             .setColor("#5865F2")
-            .setTitle(" THÔNG BÁO CHÍNH THỨC HỌC VIỆN SĨ QUAN")
+            .setTitle(" THÔNG BÁO QĐNDVN BDC")
             .setDescription(`>>> ${noidung}`)
             .addFields(
                 {
