@@ -1,65 +1,86 @@
 const {
     Client,
     GatewayIntentBits,
-    EmbedBuilder,
-    PermissionsBitField
+    SlashCommandBuilder,
+    REST,
+    Routes,
+    EmbedBuilder
 } = require("discord.js");
 
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
+    intents: [GatewayIntentBits.Guilds]
 });
 
-const PREFIX = "!";
+client.once("ready", async () => {
 
-client.once("ready", () => {
     console.log(`✅ ${client.user.tag} đã online`);
-});
 
-client.on("messageCreate", async (message) => {
-
-    if (message.author.bot) return;
-    if (!message.guild) return;
-
-    if (!message.content.startsWith(`${PREFIX}tb`)) return;
-
-    if (
-        !message.member.permissions.has(
-            PermissionsBitField.Flags.ManageMessages
-        )
-    ) {
-        return message.reply("❌ Bạn không có quyền sử dụng lệnh này.");
-    }
-
-    const content = message.content.slice(3).trim();
-
-    if (!content) {
-        return message.reply(
-            "❌ Vui lòng nhập nội dung.\nVí dụ: `!tb Máy chủ bảo trì lúc 20h`"
-        );
-    }
-
-    const embed = new EmbedBuilder()
-        .setTitle("📢 THÔNG BÁO")
-        .setDescription(content)
-        .setColor("#0099ff")
-        .setThumbnail(client.user.displayAvatarURL())
-        .setFooter({
-            text: "Hệ thống thông báo"
-        })
-        .setTimestamp();
+    const commands = [
+        new SlashCommandBuilder()
+            .setName("thongbao")
+            .setDescription("Gửi thông báo")
+            .addStringOption(option =>
+                option
+                    .setName("noidung")
+                    .setDescription("Nội dung thông báo")
+                    .setRequired(true)
+            )
+            .toJSON()
+    ];
 
     try {
-        await message.channel.send({
-            embeds: [embed]
-        });
 
-        await message.delete().catch(() => {});
+        const rest = new REST({ version: "10" })
+            .setToken(process.env.TOKEN);
+
+        await rest.put(
+            Routes.applicationCommands(client.user.id),
+            { body: commands }
+        );
+
+        console.log("✅ Đã đăng ký Slash Commands");
+
     } catch (err) {
         console.error(err);
+    }
+});
+
+client.on("interactionCreate", async interaction => {
+
+    if (!interaction.isChatInputCommand()) return;
+
+    if (interaction.commandName === "thongbao") {
+
+        const noidung =
+            interaction.options.getString("noidung");
+
+        const embed = new EmbedBuilder()
+            .setColor("#5865F2")
+            .setTitle("📢 THÔNG BÁO CHÍNH THỨC")
+            .setDescription(`>>> ${noidung}`)
+            .addFields(
+                {
+                    name: "🕒 Thời gian",
+                    value: `<t:${Math.floor(Date.now() / 1000)}:F>`
+                },
+                {
+                    name: "📌 Trạng thái",
+                    value: "Đang có hiệu lực"
+                }
+            )
+            .setFooter({
+                text: interaction.guild.name
+            })
+            .setTimestamp();
+
+        await interaction.reply({
+            content: "✅ Đã gửi thông báo",
+            ephemeral: true
+        });
+
+        await interaction.channel.send({
+            embeds: [embed]
+        });
     }
 });
 
