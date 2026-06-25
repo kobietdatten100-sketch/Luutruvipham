@@ -56,15 +56,15 @@ client.on("interactionCreate", async interaction => {
 
         const embed = new EmbedBuilder()
             .setColor("#5865F2")
-            .setTitle("📢 THÔNG BÁO CHÍNH THỨC")
+            .setTitle(" THÔNG BÁO CHÍNH THỨC HỌC VIỆN SĨ QUAN")
             .setDescription(`>>> ${noidung}`)
             .addFields(
                 {
-                    name: "🕒 Thời gian",
+                    name: " Thời gian",
                     value: `<t:${Math.floor(Date.now() / 1000)}:F>`
                 },
                 {
-                    name: "📌 Trạng thái",
+                    name: " Trạng thái",
                     value: "Đang có hiệu lực"
                 }
             )
@@ -74,7 +74,7 @@ client.on("interactionCreate", async interaction => {
             .setTimestamp();
 
         await interaction.reply({
-            content: "✅ Đã gửi thông báo",
+            content: " Đã gửi thông báo",
             ephemeral: true
         });
 
