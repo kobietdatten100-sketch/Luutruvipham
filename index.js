@@ -4,7 +4,9 @@ const client = new Client({intents: [GatewayIntentBits.Guilds,GatewayIntentBits.
 
 const PREFIX = "!";
 
-client.once("ready", () => {console.log(log ${client.user.tag} đã online);});
+client.once("ready", () => {
+    console.log(`✅ ${client.user.tag} đã online`);
+});
 
 client.on("messageCreate", async (message) => {
 
