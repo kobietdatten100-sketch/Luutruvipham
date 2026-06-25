@@ -11,7 +11,11 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds]
 });
 
-const OWNER_ID = "1273975199385129064";
+const ALLOWED_USERS = [
+    "1273975199385129064", 
+    "1251098308634476598",
+    "ID_NGUOI_3"
+];
 
 client.once("ready", async () => {
 
@@ -51,9 +55,9 @@ client.on("interactionCreate", async interaction => {
 
 if (!interaction.isChatInputCommand()) return;
 
-if (interaction.user.id !== OWNER_ID) {
+if (!ALLOWED_USERS.includes(interaction.user.id)) {
     return interaction.reply({
-        content: " Chỉ Admin mới được sử dụng lệnh này.",
+        content: "Mầy Đéo có quyền dùng lệnh ok?.",
         ephemeral: true
     });
 }
@@ -73,7 +77,7 @@ if (interaction.user.id !== OWNER_ID) {
                 },
                 {
                     name: " Trạng thái",
-                    value: "Đang có hiệu lực"
+                    value: "Đang có hiệu lực-by Uchiha_henaku"
                 }
             )
             .setFooter({
